@@ -1,12 +1,13 @@
-import numpy as np
+import numpy as np 
 import matplotlib.pyplot as plt
 from math import atan2
+import random
 
 mass_M87 = 1e3
 G = 0.007 #grav univ const
 C = 3     #speed of light
 
-dt = 0.2  #delta time
+dt = 0.3  #delta time
 
 class Blackhole:
   def __init__(self):
@@ -27,13 +28,14 @@ m87 = Blackhole()
 m87.draw()
 
 class Photon:
-  def __init__(self, x=2, y=2):
+  def __init__(self, x=-1, y=m87.photon_sphere+0.5):
     self.position = [x,y]
     self.theta = atan2(self.position[1], self.position[0]) #angle photon-blackhole
     self.theta_ph = 0 #angle photon-horizontal
+    self.delta_theta_ph = 0
     self.x_coords = np.array([])
     self.y_coords = np.array([])
-#    plt.plot(x,y, 'yo')
+    plt.plot(x,y, 'yo')
 
   def photonSphere(self):
     dist_sqr = (self.position[0]**2 + self.position[1]**2)
@@ -48,36 +50,51 @@ class Photon:
     self.position[1] = self.position[0]*np.sin((self.delta_theta_ph)) + self.position[1]*np.cos((self.delta_theta_ph))
 
  
-  def stableOrbit(self, radius):
+  def unstableOrbit(self, radius):
     self.position[0] = radius*np.cos(self.theta)
     self.position[1] = radius*np.sin(self.theta)
 
     self.theta += 0.01
- 
+
+    # random rotations photon-horizontal in orbit
+    if self.delta_theta_ph == 0:
+      self.delta_theta_ph = random.uniform(0, np.pi/64)
+
+    self.position[0] = self.position[0]*np.cos((self.delta_theta_ph)) - self.position[1]*np.sin((self.delta_theta_ph))
+    self.position[1] = self.position[0]*np.sin((self.delta_theta_ph)) + self.position[1]*np.cos((self.delta_theta_ph))
+
+  
   def update(self):
+    if self.position[0] > m87.radius+10 or self.position[0] < m87.radius-10:
+      return False
+    if self.position[1] > m87.radius+10 or self.position[1] < m87.radius-10:
+      return False
+
     r_sqr = self.position[0]**2 + self.position[1]**2 
 
     if r_sqr < m87.radius**2:
-      return 0 
+      # inside event horizon
+      return False
     
     if r_sqr < m87.photon_sphere**2:
+      # inside photon sphere
       self.photonSphere()
     else:
-      self.stableOrbit(np.sqrt(r_sqr))
+      #outise photon sphere
+      self.unstableOrbit(np.sqrt(r_sqr))
 
     self.x_coords = np.append(self.x_coords, self.position[0])
     self.y_coords = np.append(self.y_coords, self.position[1])
-    return 1
+    return True
 
   def draw(self):
     plt.plot(self.x_coords, self.y_coords, 'y')
-    #plt.imshow((self.x_coords, self.y_coords))
 
-
-beam = [Photon(0.5,y) for y in np.arange(1,3,0.06)]
+beam = [Photon() for _ in range(3)]
 for photon in beam:
   for _ in range(1000):
-    photon.update()
+    if not photon.update():
+      break
   photon.draw()
 
 plt.axis('equal')
