@@ -1,7 +1,4 @@
 # Blackhole 2d 
-
-A toy implementation of ~~neural network~~ normal chess written while livestreaming.
-
 A toy simulation of a ~kinda~ 2d blackhole
 ![](screenshot.png)
 
@@ -16,7 +13,8 @@ Usage
  pip3 install numpy matplotlib tqdm
  # then...
  ./to_image.py   
- # set flag RE_CALCULATE=True inside <to_image.py> for new images every time
+
+ # obs: set flag RE_CALCULATE=True inside <to_image.py> for new images every time
 ```
 
 Implementation
