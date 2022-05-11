@@ -1,10 +1,10 @@
 # Blackhole 2d 
-A toy simulation of a ~kinda~ 2d blackhole
+A toy simulation of a -kinda- 2d blackhole
 ![](screenshot.png)
 
 Nice TODO
 -----
-* Add relativistic effects (currently using newtonian physics :/)
+* Implement relativistic effects (currently using newtonian physics)
 
 Usage
 -----
@@ -19,4 +19,5 @@ Usage
 
 Implementation
 -----
-Check https://www.asc.ohio-state.edu/orban.14/stemcoding/blackhole_derivation_slide3.png for more information
+Check for more information:
+ * https://www.asc.ohio-state.edu/orban.14/stemcoding/blackhole_derivation_slide3.png
