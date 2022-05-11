@@ -5,6 +5,7 @@ A toy simulation of a -kinda- 2d blackhole
 Nice TODO
 -----
 * Implement relativistic effects (currently using newtonian physics)
+* Threads for faster processing
 
 Usage
 -----
